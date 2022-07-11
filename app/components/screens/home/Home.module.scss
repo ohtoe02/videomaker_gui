@@ -1,9 +1,10 @@
 .wrapper {
+  position: absolute;
   border-radius: 8px;
   padding: 2rem;
   width: 100%;
   height: fit-content;
-  background-color: aliceblue;
+  background-color: white;
 
   > h1 {
     padding: 0;

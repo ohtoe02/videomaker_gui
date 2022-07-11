@@ -4,9 +4,9 @@ import {useEffect, useState} from "react";
 import QuestionMark from "../../ui/icons/question_mark/QuestionMark";
 import {
     Autocomplete,
-    Button,
+    Button, Checkbox,
     Divider,
-    FormControl,
+    FormControl, FormControlLabel,
     InputLabel, MenuItem, Select,
     TextField,
     ToggleButton,
@@ -27,7 +27,9 @@ const Home = ({ tts_engines }) => {
         comment_length: '',
         times_to_run: '',
         comment_opacity: '',
-        theme: 'light'
+        theme: 'light',
+        allow_nsfw: false,
+        reddit_2fa: false
     })
 
     useEffect(() => {
@@ -51,20 +53,30 @@ const Home = ({ tts_engines }) => {
         setCurrentVoice(value)
     }
 
+    const handleCheckChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.checked;
+        console.log(e.target)
+        setInputs(values => ({...values, [name]: value}))
+    }
+
     const submitHandler = (e) => {
         e.preventDefault()
         const data = {
-            username: inputs.username,
-            password: inputs.password,
-            client_id: inputs.client_id,
-            client_secret: inputs.client_secret,
+            reddit_username: inputs.username,
+            reddit_password: inputs.password,
+            reddit_client_id: inputs.client_id,
+            reddit_client_secret: inputs.client_secret,
+            theme: inputs.theme,
             subreddit: inputs.subreddit,
-            subreddit_post_id: inputs.subreddit_post_id,
-            comment_length: inputs.comment_length,
+            post_id: inputs.subreddit_post_id,
+            max_comment_length: inputs.comment_length,
             times_to_run: inputs.times_to_run,
-            comment_opacity: inputs.comment_opacity,
-            tts_engine: tts_engine,
+            opacity: inputs.comment_opacity,
+            ttschoice: tts_engine,
             voice: currentVoice,
+            allow_nsfw: inputs.allow_nsfw,
+            reddit_2fa: inputs.reddit_2fa
         }
 
         console.log(data)
@@ -162,7 +174,7 @@ const Home = ({ tts_engines }) => {
                           name={'comment_opacity'}
                           id="opacity-input"
                           label="Comment opacity"
-                          inputProps={{ inputMode: 'numeric', pattern: '^[0-1]\.[0-9]{2}$' }}
+                          // inputProps={{ inputMode: 'numeric', pattern: '^[0-1]\.[0-9]{2}$' }}
                           placeholder={'0.0 - 1.0'}
                           value={inputs.comment_opacity}
                           onChange={e => handleInputUpdate(e)}
@@ -197,20 +209,25 @@ const Home = ({ tts_engines }) => {
                       onChange={(e, value) => handleVoiceChange(e, value)}
                       sx={{'> div ': inputStyleCorrection}}
                     />
-                    <ToggleButtonGroup
-                      size={"large"}
-                      value={inputs.theme}
-                      exclusive
-                      onChange={e => handleInputUpdate(e)}
-                      aria-label="text alignment"
-                      sx={{ fontFamily: "Inter, serif" }}
-                    >
-                        <ToggleButton name={'theme'} value='light'>Light</ToggleButton>
-                        <ToggleButton name={'theme'} value='dark'>Dark</ToggleButton>
-                    </ToggleButtonGroup>
+                    <div style={{display: 'flex', gap: '24px', alignItems: 'center'}}>
+                        <ToggleButtonGroup
+                          size={"large"}
+                          value={inputs.theme}
+                          exclusive
+                          onChange={e => handleInputUpdate(e)}
+                          aria-label="text alignment"
+                          sx={{ fontFamily: "Inter, serif" }}
+                        >
+                            <ToggleButton name={'theme'} value='light'>Light</ToggleButton>
+                            <ToggleButton name={'theme'} value='dark'>Dark</ToggleButton>
+                        </ToggleButtonGroup>
+
+                        <FormControlLabel sx={{userSelect: 'none'}} control={<Checkbox name={'allow_nsfw'} onChange={e => handleCheckChange(e)} sx={{display: 'flex', marginLeft: '8px', height: '42px'}} />} label={'Allow NSFW'} />
+                        <FormControlLabel sx={{userSelect: 'none'}} control={<Checkbox name={'reddit_2fa'} onChange={handleCheckChange} sx={{display: 'flex', height: '42px'}} />} label={'2FA'} />
+                    </div>
                 </section>
                 <Button
-                  sx={{fontWeight: '800', marginTop: '24px', position: 'absolute', bottom: '3rem', right: '2rem'}}
+                  sx={{fontWeight: '800', marginTop: '24px', position: 'absolute', bottom: '2rem', right: '2rem'}}
                   variant="contained"
                   type={"submit"}
                 >
