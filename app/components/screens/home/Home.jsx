@@ -1,5 +1,7 @@
 import Meta from "../../../utils/Meta";
 import styles from "./Home.module.scss"
+import {useEffect, useState} from "react";
+import QuestionMark from "../../ui/icons/question_mark/QuestionMark";
 import {
     Autocomplete,
     Button,
@@ -10,12 +12,11 @@ import {
     ToggleButton,
     ToggleButtonGroup
 } from "@mui/material";
-import {useEffect, useState} from "react";
 
 const Home = ({ tts_engines }) => {
     const [currentVoices, setCurrentVoices] = useState([])
     const [tts_engine, setTtsEngine] = useState('tiktok')
-    const [currentVoice, setCurrentVoice] = useState('')
+    const [currentVoice, setCurrentVoice] = useState('Stitch')
     const [inputs, setInputs] = useState({
         username: '',
         password: '',
@@ -26,7 +27,7 @@ const Home = ({ tts_engines }) => {
         comment_length: '',
         times_to_run: '',
         comment_opacity: '',
-        voice: '',
+        theme: 'light'
     })
 
     useEffect(() => {
@@ -51,8 +52,23 @@ const Home = ({ tts_engines }) => {
         setCurrentVoice(value)
     }
 
-    const submitHandler = () => {
+    const submitHandler = (e) => {
+        e.preventDefault()
+        const data = {
+            username: inputs.username,
+            password: inputs.password,
+            client_id: inputs.client_id,
+            client_secret: inputs.client_secret,
+            subreddit: inputs.subreddit,
+            subreddit_post_id: inputs.subreddit_post_id,
+            comment_length: inputs.comment_length,
+            times_to_run: inputs.times_to_run,
+            comment_opacity: inputs.comment_opacity,
+            tts_engine: tts_engine,
+            voice: currentVoice,
+        }
 
+        console.log(data)
     }
 
     return (
@@ -60,7 +76,7 @@ const Home = ({ tts_engines }) => {
         <Meta title={'Главная'} description={"Описание"} />
         <section className={styles.wrapper}>
             <h1>RedditVideoMaker 🎥</h1>
-            <form className={styles.form} onSubmit={submitHandler}>
+            <form className={styles.form} onSubmit={e => submitHandler(e)}>
                 <section className={styles['input-section']}>
                     <TextField
                       required
@@ -111,6 +127,7 @@ const Home = ({ tts_engines }) => {
                       id="post-id-input"
                       label="Subreddit post ID"
                       type={"number"}
+                      pattern="[0-9]+"
                       value={inputs.subreddit_post_id}
                       onChange={e => handleInputUpdate(e)}
                     />
@@ -128,19 +145,24 @@ const Home = ({ tts_engines }) => {
                       id="max-comment-length-input"
                       label="Max comment length"
                       type={"number"}
+                      pattern='[0-9]{0,5}'
                       placeholder={'Default - 500'}
                       value={inputs.comment_length}
                       onChange={e => handleInputUpdate(e)}
                     />
-                    <TextField
-                      name={'comment_opacity'}
-                      id="opacity-input"
-                      label="Comment opacity"
-                      type={"number"}
-                      placeholder={'0.0 - 1.0'}
-                      value={inputs.comment_opacity}
-                      onChange={e => handleInputUpdate(e)}
-                    />
+                    <div style={{display: "flex", alignItems: 'center', gap: '8px'}}>
+                        <TextField
+                          name={'comment_opacity'}
+                          id="opacity-input"
+                          label="Comment opacity"
+                          type={"number"}
+                          placeholder={'0.0 - 1.0'}
+                          value={inputs.comment_opacity}
+                          onChange={e => handleInputUpdate(e)}
+                          sx={{width: '100%'}}
+                        />
+                        <QuestionMark />
+                    </div>
                     <FormControl fullWidth>
                         <InputLabel id="tts-select-label">TTS Engine</InputLabel>
                         <Select
@@ -166,9 +188,16 @@ const Home = ({ tts_engines }) => {
                       value={currentVoice}
                       onChange={(e, value) => handleVoiceChange(e, value)}
                     />
-                    <ToggleButtonGroup >
-                        <ToggleButton value='light'>Light</ToggleButton>
-                        <ToggleButton value='dark'>Dark</ToggleButton>
+                    <ToggleButtonGroup
+                      size={"large"}
+                      value={inputs.theme}
+                      exclusive
+                      onChange={e => handleInputUpdate(e)}
+                      aria-label="text alignment"
+                      sx={{ fontFamily: "Inter, serif" }}
+                    >
+                        <ToggleButton name={'theme'} value='light'>Light</ToggleButton>
+                        <ToggleButton name={'theme'} value='dark'>Dark</ToggleButton>
                     </ToggleButtonGroup>
                 </section>
                 <Button
