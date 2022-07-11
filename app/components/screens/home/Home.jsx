@@ -87,8 +87,8 @@ const Home = ({ tts_engines }) => {
     return (
     <div style={ {padding: '16px 0'} }>
         <Meta title={'Главная'} description={"Описание"} />
+        <h1 className={styles.header}><span style={{fontSize: '48px'} }>🎥</span> Reddit Video Maker <span style={{fontSize: '48px'} }>🎥</span></h1>
         <section className={styles.wrapper}>
-            <h1>RedditVideoMaker 🎥</h1>
             <form className={styles.form} onSubmit={e => submitHandler(e)}>
                 <section className={styles['input-section']}>
                     <TextField
