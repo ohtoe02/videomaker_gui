@@ -39,7 +39,6 @@ const Home = ({ tts_engines }) => {
     const handleInputUpdate = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(e.target)
         setInputs(values => ({...values, [name]: value}))
     }
 
@@ -71,6 +70,8 @@ const Home = ({ tts_engines }) => {
         console.log(data)
     }
 
+    const inputStyleCorrection = {'> div > fieldset': {'borderColor': 'black'}}
+
     return (
     <div style={ {padding: '16px 0'} }>
         <Meta title={'Главная'} description={"Описание"} />
@@ -85,6 +86,7 @@ const Home = ({ tts_engines }) => {
                       label="Reddit username"
                       value={inputs.username}
                       onChange={e => handleInputUpdate(e)}
+                      sx={inputStyleCorrection}
                     />
                     <TextField
                       required
@@ -94,6 +96,7 @@ const Home = ({ tts_engines }) => {
                       type="password"
                       value={inputs.password}
                       onChange={e => handleInputUpdate(e)}
+                      sx={inputStyleCorrection}
                     />
                     <TextField
                       required
@@ -102,6 +105,7 @@ const Home = ({ tts_engines }) => {
                       label="Reddit client ID"
                       value={inputs.client_id}
                       onChange={e => handleInputUpdate(e)}
+                      sx={inputStyleCorrection}
                     />
                     <TextField
                       required
@@ -110,6 +114,7 @@ const Home = ({ tts_engines }) => {
                       label="Reddit client secret"
                       value={inputs.client_secret}
                       onChange={e => handleInputUpdate(e)}
+                      sx={inputStyleCorrection}
                     />
                     <TextField
                       required
@@ -120,50 +125,53 @@ const Home = ({ tts_engines }) => {
                       className={styles.wide}
                       value={inputs.subreddit}
                       onChange={e => handleInputUpdate(e)}
+                      sx={inputStyleCorrection}
                     />
                     <Divider className={styles.wide}/>
                     <TextField
                       name={'subreddit_post_id'}
                       id="post-id-input"
                       label="Subreddit post ID"
-                      type={"number"}
-                      pattern="[0-9]+"
+                      inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                       value={inputs.subreddit_post_id}
                       onChange={e => handleInputUpdate(e)}
+                      sx={inputStyleCorrection}
                     />
                     <TextField
                       name={'times_to_run'}
                       id="times-to-run-input"
                       label="Times to run"
-                      type={"number"}
+                      inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                       placeholder={'Default - 1'}
                       value={inputs.times_to_run}
                       onChange={e => handleInputUpdate(e)}
+                      sx={inputStyleCorrection}
                     />
                     <TextField
                       name={'comment_length'}
                       id="max-comment-length-input"
                       label="Max comment length"
-                      type={"number"}
-                      pattern='[0-9]{0,5}'
+                      inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                       placeholder={'Default - 500'}
                       value={inputs.comment_length}
                       onChange={e => handleInputUpdate(e)}
+                      sx={inputStyleCorrection}
                     />
                     <div style={{display: "flex", alignItems: 'center', gap: '8px'}}>
                         <TextField
                           name={'comment_opacity'}
                           id="opacity-input"
                           label="Comment opacity"
-                          type={"number"}
+                          inputProps={{ inputMode: 'numeric', pattern: '^[0-1]\.[0-9]{2}$' }}
                           placeholder={'0.0 - 1.0'}
                           value={inputs.comment_opacity}
                           onChange={e => handleInputUpdate(e)}
-                          sx={{width: '100%'}}
+                          fullWidth
+                          sx={inputStyleCorrection}
                         />
                         <QuestionMark />
                     </div>
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={inputStyleCorrection}>
                         <InputLabel id="tts-select-label">TTS Engine</InputLabel>
                         <Select
                           name={'tts_engine'}
@@ -187,6 +195,7 @@ const Home = ({ tts_engines }) => {
                       renderInput={(params) => <TextField {...params} label="Voice" />}
                       value={currentVoice}
                       onChange={(e, value) => handleVoiceChange(e, value)}
+                      sx={{'> div ': inputStyleCorrection}}
                     />
                     <ToggleButtonGroup
                       size={"large"}
