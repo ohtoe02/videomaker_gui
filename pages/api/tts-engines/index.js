@@ -1,4 +1,6 @@
 // noinspection NonAsciiCharacters
+import {tts_engines} from "../../../app/constants";
+
 export const TtsEngines = [
   {
     _id: 'tiktok',
@@ -184,5 +186,5 @@ export const TtsEngines = [
 ]
 
 export default function handler(req, res) {
-  res.status(200).json(TtsEngines)
+  res.status(200).json(tts_engines)
 }

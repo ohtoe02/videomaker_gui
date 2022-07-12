@@ -1,11 +1,7 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Meta from "../app/utils/Meta";
 import Home from "../app/components/screens/home/Home";
 import Container from "../app/components/ui/container/Container";
 import Wrapper from "../app/components/ui/wrapper/Wrapper";
-import {API_URL} from "../app/constants";
-import axios from "axios";
+import {API_URL, tts_engines} from "../app/constants";
 
 export default function HomePage(props) {
   return (
@@ -18,7 +14,6 @@ export default function HomePage(props) {
 }
 
 export const getStaticProps = async () => {
-  const { data: tts_engines } = await axios.get(`${API_URL}/tts-engines`)
 
   return {
     props: {
