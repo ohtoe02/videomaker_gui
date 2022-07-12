@@ -32,6 +32,13 @@ const Home = ({ tts_engines }) => {
         reddit_2fa: false
     })
 
+    const voice_variable_names = {
+        'streamlabs': 'streamlabs_voice',
+        'tiktok': 'tiktok_voice',
+        'gtts': 'postlang',
+        'aws': 'aws_voice',
+    }
+
     useEffect(() => {
         const voices = tts_engines.find(item => item._id === tts_engine).voices
         const currentVoices = Object.keys(voices)
@@ -56,7 +63,6 @@ const Home = ({ tts_engines }) => {
     const handleCheckChange = (e) => {
         const name = e.target.name;
         const value = e.target.checked;
-        console.log(e.target)
         setInputs(values => ({...values, [name]: value}))
     }
 
@@ -74,12 +80,19 @@ const Home = ({ tts_engines }) => {
             times_to_run: inputs.times_to_run,
             opacity: inputs.comment_opacity,
             ttschoice: tts_engine,
-            voice: currentVoice,
+            tiktok_voice: '',
+            streamlabs_voice: '',
+            aws_voice: '',
+            postlang: '',
             allow_nsfw: inputs.allow_nsfw,
             reddit_2fa: inputs.reddit_2fa
         }
 
-        console.log(data)
+        const voice_id = tts_engines.find(engine => engine._id === tts_engine).voices[currentVoice]._id
+
+        data[voice_variable_names[tts_engine]] = voice_id
+
+        console.log('Готово!', data)
     }
 
     const inputStyleCorrection = {'> div > fieldset': {'borderColor': 'black'}}
